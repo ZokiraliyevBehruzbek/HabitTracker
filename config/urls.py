@@ -5,6 +5,11 @@ from django.conf.urls.static import static
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
 
 # Define JWT Bearer security scheme
 swagger_security = [{"Bearer": []}]
@@ -22,15 +27,14 @@ schema_view = get_schema_view(
 
 urlpatterns = (
     [
+        path("", include("users.urls") ),
+        path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
         path("admin/", admin.site.urls),
-        # path("auth/", include("users.urls")),
-        # path("factors/", include("factors.urls")),
         path(
             "swagger(<format>\.json|\.yaml)",
             schema_view.without_ui(cache_timeout=0),
             name="schema-json",
         ),
-        # path("movies/", include("movies.urls")),
         path(
             "swagger/",
             schema_view.with_ui("swagger", cache_timeout=0),
@@ -40,6 +44,4 @@ urlpatterns = (
             "redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"
         ),
     ]
-    + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    # + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-)
+)+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
