@@ -41,10 +41,10 @@ INSTALLED_APPS = [
     "habits",
     "stats",
     "tracking",
-    "users",
     'drf_yasg',
     'rest_framework',
     'rest_framework_simplejwt',
+    'users',
     'colorfield',
 ]
 REST_FRAMEWORK = {

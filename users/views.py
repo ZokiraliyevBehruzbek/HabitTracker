@@ -42,31 +42,11 @@ class RegisterView(GenericAPIView):
         )
     
 
-# class LoginView(APIView):
-#     def post(self, request):
-#         serializer = LoginSerializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-
-#         user = authenticate(
-#             username=serializer.validated_data["username"],
-#             password=serializer.validated_data["password"]
-#         )
-
-#         if user is None:
-#             return Response({"error": "Invalid credentials"}, status=400)
-
-#         refresh = RefreshToken.for_user(user)
-
-#         return Response({
-#             "refresh": str(refresh),
-#             "access": str(refresh.access_token),
-#         })
 
 @method_decorator(csrf_exempt, name='dispatch')
 class LoginView(GenericAPIView):
     serializer_class = LoginSerializer
-    permission_classes = [permissions.AllowAny]  # login endpointni hammaga ruxsat berish
-
+    permission_classes = [permissions.AllowAny]
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -78,33 +58,6 @@ class LoginView(GenericAPIView):
             "access": str(refresh.access_token),
         }, status=status.HTTP_200_OK)
     
-# class LoginView(serializers.Serializer):
-#     username = serializers.CharField(required=True)
-#     password = serializers.CharField(required=True, write_only=True)
-
-#     def validate(self, data):
-#         user = authenticate(
-#             username=data.get("username"),
-#             password=data.get("password")
-#         )
-
-#         if not user:
-#             raise serializers.ValidationError("Invalid username or password.")
-
-#         if not user.is_active:
-#             raise serializers.ValidationError("User is inactive.")
-
-#         data["user"] = user
-#         return data
-
-
-# class ProfileView(RetrieveAPIView):
-#     permission_classes = [IsAuthenticated]
-
-#     def get(self, request):
-#         serializer = UserSerializer(request.user)
-#         return Response(serializer.data)
-
 class ProfileView(RetrieveAPIView):
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]

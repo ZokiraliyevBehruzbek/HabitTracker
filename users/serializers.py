@@ -43,7 +43,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         user = User(
             username=validated_data["username"]
         )
-        user.set_password(validated_data["password"])  # 👈 muhim: hash saqlash
+        user.set_password(validated_data["password"])
         user.save()
         return user
 
